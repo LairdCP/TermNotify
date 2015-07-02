@@ -3,7 +3,7 @@
 **
 ** Project: TermNotify
 **
-** Module: mainwindow.cpp
+** Module: TNMainWindow.cpp
 **
 ** Notes:
 **
