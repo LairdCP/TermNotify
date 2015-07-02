@@ -24,12 +24,12 @@
 /******************************************************************************/
 // Include Files
 /******************************************************************************/
-#include "mainwindow.h"
+#include "TNMainWindow.h"
 
 /******************************************************************************/
 // Local Functions or Private Members
 /******************************************************************************/
-MainWindow::MainWindow(QObject *parent) : QObject(parent)
+TNMainWindow::TNMainWindow(QObject *parent) : QObject(parent)
 {
 #if TARGET_OS_MAC
     //On mac, get the directory of the bundle (which will be <location>/TermNotify.app/Contents/MacOS) and go up to the folder with the file in
@@ -56,14 +56,25 @@ MainWindow::MainWindow(QObject *parent) : QObject(parent)
         "./UwTerminalX"
 #endif
     ).toString();
+    gstrArgumentList = stgSettings.value("ArgumentList", "ACCEPT COM=%PORT% NOCONNECT").toString();
     gintDisplayTime = stgSettings.value("DisplayTime", DefaultDisplayTime).toUInt();
     gintScanTime = stgSettings.value("ScanTime", DefaultScanTime).toUInt();
 
+    //Set defaults if not found in configuration file
     if (stgSettings.value("RunFile").isNull())
     {
-        //Set defaults
         stgSettings.setValue("RunFile", gstrExecutable);
+    }
+    if (stgSettings.value("ArgumentList").isNull())
+    {
+        stgSettings.setValue("ArgumentList", gstrArgumentList);
+    }
+    if (stgSettings.value("DisplayTime").isNull())
+    {
         stgSettings.setValue("DisplayTime", gintDisplayTime);
+    }
+    if (stgSettings.value("ScanTime").isNull())
+    {
         stgSettings.setValue("ScanTime", gintScanTime);
     }
 
@@ -77,9 +88,14 @@ MainWindow::MainWindow(QObject *parent) : QObject(parent)
     gpContextMenu->addAction(new QAction("Laird TermNotify", this));
     gpContextMenu->addAction(new QAction(TermNotifyVer, this));
     gpContextMenu->addSeparator();
+    gpContextMenu->addAction(new QAction("Edit Configuration", this));
     gpContextMenu->addAction(new QAction("Exit", this));
     gpContextMenu->actions()[0]->setDisabled(true);
     gpContextMenu->actions()[1]->setDisabled(true);
+#ifdef TARGET_OS_MAC
+    //Disabled due to Mac not associating .ini files with text editor
+    gpContextMenu->actions()[2]->setDisabled(true);
+#endif
 
     //Create system tray object
 #ifdef _WIN32
@@ -93,7 +109,7 @@ MainWindow::MainWindow(QObject *parent) : QObject(parent)
     gstSysTrayIcon.show();
 
     //Connect up the context menu
-    connect(gpContextMenu, SIGNAL(triggered(QAction*)), this, SLOT(CloseApplication(QAction*)));
+    connect(gpContextMenu, SIGNAL(triggered(QAction*)), this, SLOT(ContextMenuClicked(QAction*)));
 
     //Connect balloon meesage clicked event
     connect(&gstSysTrayIcon, SIGNAL(messageClicked()), this, SLOT(OpenProgram()));
@@ -112,12 +128,12 @@ MainWindow::MainWindow(QObject *parent) : QObject(parent)
 
 //=============================================================================
 //=============================================================================
-MainWindow::~MainWindow
+TNMainWindow::~TNMainWindow
     (
     )
 {
     //Disconnect events
-    disconnect(this, SLOT(CloseApplication(QAction*)));
+    disconnect(this, SLOT(ContextMenuClicked(QAction*)));
     disconnect(this, SLOT(OpenProgram()));
     disconnect(this, SLOT(SerialCheck()));
 
@@ -134,7 +150,7 @@ MainWindow::~MainWindow
 //=============================================================================
 //=============================================================================
 void
-MainWindow::SerialCheck
+TNMainWindow::SerialCheck
     (
     )
 {
@@ -171,22 +187,33 @@ MainWindow::SerialCheck
 //=============================================================================
 //=============================================================================
 void
-MainWindow::OpenProgram
+TNMainWindow::OpenProgram
     (
     )
 {
     //Opens UwTerminalX when clicked
-    gpTerminalProcess.startDetached(gstrExecutable, QStringList() << "ACCEPT" << QString("COM=").append(gstrSerialName) << "NOCONNECT");
+    QString strArguments = QString(gstrArgumentList).replace("%PORT%", gstrSerialName);
+    gpTerminalProcess.startDetached(gstrExecutable, strArguments.split(" "));
 }
 
 //=============================================================================
 //=============================================================================
 void
-MainWindow::CloseApplication
+TNMainWindow::ContextMenuClicked
     (
-    QAction *Act
+    QAction *actAction
     )
 {
-    //Closes the application
-    QApplication::quit();
+    if (actAction->text() == "Exit")
+    {
+        //Closes the application
+        QApplication::quit();
+    }
+#ifndef TARGET_OS_MAC
+    else if (actAction->text() == "Edit Configuration")
+    {
+        //Open INI for editing
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo("TermNotify.ini").absoluteFilePath()));
+    }
+#endif
 }

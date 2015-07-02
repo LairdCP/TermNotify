@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core serialport
-QT -= gui
+QT       -= gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,10 +13,11 @@ TARGET = TermNotify
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += main.cpp \
+    TNMainWindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += \
+    TNMainWindow.h
 
 FORMS    +=
 

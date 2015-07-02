@@ -24,7 +24,7 @@
 /******************************************************************************/
 // Include Files
 /******************************************************************************/
-#include "mainwindow.h"
+#include "TNMainWindow.h"
 #include <QApplication>
 
 /******************************************************************************/
@@ -32,10 +32,12 @@
 /******************************************************************************/
 int main(int argc, char *argv[])
 {
+    //
     QApplication a(argc, argv);
 
-    MainWindow MySerial;
-//    MainWindow w;
+    //
+    TNMainWindow MySerial;
 
+    //
     return a.exec();
 }
