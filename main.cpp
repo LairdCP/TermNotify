@@ -30,14 +30,18 @@
 /******************************************************************************/
 // Local Functions or Private Members
 /******************************************************************************/
-int main(int argc, char *argv[])
+int
+main(
+    int argc,
+    char *argv[]
+    )
 {
-    //
+    //Construct the application
     QApplication a(argc, argv);
 
-    //
-    TNMainWindow MySerial;
+    //Create the TermNotify class
+    TNMainWindow TermSerialApp;
 
-    //
+    //Execute the program
     return a.exec();
 }

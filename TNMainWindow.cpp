@@ -29,8 +29,7 @@
 /******************************************************************************/
 // Local Functions or Private Members
 /******************************************************************************/
-TNMainWindow::TNMainWindow(QObject *parent) : QObject(parent)
-{
+TNMainWindow::TNMainWindow(QObject *parent) : QObject(parent){
 #if TARGET_OS_MAC
     //On mac, get the directory of the bundle (which will be <location>/TermNotify.app/Contents/MacOS) and go up to the folder with the file in
     QDir BundleDir(QCoreApplication::applicationDirPath());
@@ -128,8 +127,7 @@ TNMainWindow::TNMainWindow(QObject *parent) : QObject(parent)
 
 //=============================================================================
 //=============================================================================
-TNMainWindow::~TNMainWindow
-    (
+TNMainWindow::~TNMainWindow(
     )
 {
     //Disconnect events
@@ -150,8 +148,7 @@ TNMainWindow::~TNMainWindow
 //=============================================================================
 //=============================================================================
 void
-TNMainWindow::SerialCheck
-    (
+TNMainWindow::SerialCheck(
     )
 {
     //Checks is a new serial device has been detected
@@ -187,8 +184,7 @@ TNMainWindow::SerialCheck
 //=============================================================================
 //=============================================================================
 void
-TNMainWindow::OpenProgram
-    (
+TNMainWindow::OpenProgram(
     )
 {
     //Opens UwTerminalX when clicked
@@ -199,8 +195,7 @@ TNMainWindow::OpenProgram
 //=============================================================================
 //=============================================================================
 void
-TNMainWindow::ContextMenuClicked
-    (
+TNMainWindow::ContextMenuClicked(
     QAction *actAction
     )
 {

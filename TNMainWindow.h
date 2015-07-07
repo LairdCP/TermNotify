@@ -58,27 +58,22 @@ class TNMainWindow : public QObject
 
 public:
     explicit
-    TNMainWindow
-        (
+    TNMainWindow(
         QObject *parent = 0
         );
-    ~TNMainWindow
-        (
+    ~TNMainWindow(
         );
 
 private slots:
     void
-    SerialCheck
-        (
+    SerialCheck(
         );
     void
-    ContextMenuClicked
-        (
+    ContextMenuClicked(
         QAction *actAction
         );
     void
-    OpenProgram
-        (
+    OpenProgram(
         );
 
 private:
