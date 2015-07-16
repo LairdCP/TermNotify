@@ -47,7 +47,7 @@
 /******************************************************************************/
 #define DefaultDisplayTime 5000 //Time in mS to display a balloon message for (OS's can override this value)
 #define DefaultScanTime 800 //Time in mS to scan for new devices
-#define TermNotifyVer "v0.65b" //Version string
+#define TermNotifyVer "v1.00" //Version string
 
 /******************************************************************************/
 // Local Functions or Private Members
